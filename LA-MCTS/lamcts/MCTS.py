@@ -54,7 +54,7 @@ class MCTS:
         
         self.ROOT = root
         self.CURT = self.ROOT
-        self.init_train()
+        # self.init_train()
         
     def populate_training_data(self):
         #only keep root
@@ -134,6 +134,9 @@ class MCTS:
             self.curt_best_sample = sample 
             self.best_value_trace.append( (value, self.sample_counter) )
         self.sample_counter += 1
+        if math.isnan(value):
+            print(f"sample {sample} value is NaN")
+            value = 0.0
         self.samples.append( (sample, value) )
         return value
         
@@ -142,10 +145,10 @@ class MCTS:
         # here we use latin hyper space to generate init samples in the search space
         init_points = latin_hypercube(self.ninits, self.dims)
         init_points = from_unit_cube(init_points, self.lb, self.ub)
-        
+
         for point in init_points:
             self.collect_samples(point)
-        
+
         print("="*10 + 'collect '+ str(len(self.samples) ) +' points for initializing MCTS'+"="*10)
         print("lb:", self.lb)
         print("ub:", self.ub)
