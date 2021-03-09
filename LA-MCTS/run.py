@@ -3,19 +3,19 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 # 
+import argparse
+import logging
+
 from functions.functions import *
 from functions.mujoco_functions import *
 from lamcts import MCTS
-import argparse
 
-
-
+logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', datefmt='%m/%d/%Y %H:%M:%S', level=logging.DEBUG)
 
 parser = argparse.ArgumentParser(description='Process inputs')
 parser.add_argument('--func', help='specify the test function')
 parser.add_argument('--dims', type=int, help='specify the problem dimensions')
 parser.add_argument('--iterations', type=int, help='specify the iterations to collect in the search')
-
 
 args = parser.parse_args()
 
@@ -23,11 +23,11 @@ f = None
 iteration = 0
 if args.func == 'ackley':
     assert args.dims > 0
-    f = Ackley(dims =args.dims)
+    f = Ackley(dims=args.dims)
 elif args.func == 'levy':
     assert args.dims > 0
-    f = Levy(dims = args.dims)
-elif args.func == 'lunar': 
+    f = Levy(dims=args.dims)
+elif args.func == 'lunar':
     f = Lunarlanding()
 elif args.func == 'swimmer':
     f = Swimmer()
@@ -35,11 +35,10 @@ elif args.func == 'hopper':
     f = Hopper()
 else:
     print('function not defined')
-    os._exit(1)
+    exit(1)
 
 assert f is not None
 assert args.iterations > 0
-
 
 # f = Ackley(dims = 10)
 # f = Levy(dims = 10)
@@ -48,18 +47,19 @@ assert args.iterations > 0
 # f = Lunarlanding()
 
 agent = MCTS(
-             lb = f.lb,              # the lower bound of each problem dimensions
-             ub = f.ub,              # the upper bound of each problem dimensions
-             dims = f.dims,          # the problem dimensions
-             ninits = f.ninits,      # the number of random samples used in initializations 
-             func = f,               # function object to be optimized
-             Cp = f.Cp,              # Cp for MCTS
-             leaf_size = f.leaf_size, # tree leaf size
-             kernel_type = f.kernel_type, #SVM configruation
-             gamma_type = f.gamma_type    #SVM configruation
-             )
+    lb=f.lb,  # the lower bound of each problem dimensions
+    ub=f.ub,  # the upper bound of each problem dimensions
+    dims=f.dims,  # the problem dimensions
+    ninits=f.ninits,  # the number of random samples used in initializations
+    func=f,  # function object to be optimized
+    Cp=f.Cp,  # Cp for MCTS
+    leaf_size=f.leaf_size,  # tree leaf size
+    kernel_type=f.kernel_type,  # SVM configruation
+    gamma_type=f.gamma_type,  # SVM configruation
+    solver_type='bo'
+)
 
-agent.search(iterations = args.iterations)
+agent.search(iterations=args.iterations)
 
 """
 FAQ:

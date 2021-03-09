@@ -82,7 +82,7 @@ class Node:
         
         val    = 0
         name  += ( self.pad_str_to_8chars( ' val:{0:.4f}   '.format(round(self.get_xbar(), 4) ) ) )
-        name  += ( self.pad_str_to_8chars( ' uct:{0:.4f}   '.format(round(self.get_uct(), 4) ) ) )
+        name  += ( self.pad_str_to_8chars( ' _uct:{0:.4f}   '.format(round(self.get_uct(), 4) ) ) )
 
         name  += self.pad_str_to_8chars( 'n:'+str(self.n) )
         name  += self.pad_str_to_8chars( 'sp:'+ str(len(self.bag)) )

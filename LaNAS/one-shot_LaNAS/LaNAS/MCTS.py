@@ -150,9 +150,9 @@ class MCTS:
         while curt_node is not None:
             if acc > 0:
                 if curt_node.n > 0:
-                    curt_node.x_bar = (curt_node.x_bar*curt_node.n + acc) / (curt_node.n + 1)
+                    curt_node._x_bar = (curt_node._x_bar * curt_node.n + acc) / (curt_node.n + 1)
                 else:
-                    curt_node.x_bar = acc
+                    curt_node._x_bar = acc
             curt_node.n    += 1
             curt_node = curt_node.parent
 
